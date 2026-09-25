@@ -12,6 +12,7 @@ import { ContemplativeMode } from "@/components/ContemplativeMode";
 import { SharePrayerModal } from "@/components/SharePrayerModal";
 import { LightCandleModal } from "@/components/LightCandleModal";
 import { VenoyFloatingBadge } from "@/components/VenoyFloatingBadge";
+import { WelcomeDevoteeModal } from "@/components/WelcomeDevoteeModal";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <ContemplativeMode />
         <SharePrayerModal />
         <LightCandleModal />
+        <WelcomeDevoteeModal />
         <VenoyFloatingBadge />
       </main>
     </NovenaProvider>

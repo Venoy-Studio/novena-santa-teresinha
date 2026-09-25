@@ -62,8 +62,12 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       className={`${cormorant.variable} ${cinzel.variable} ${plusJakarta.variable} scroll-smooth`}
+      suppressHydrationWarning
     >
-      <body className="min-h-screen bg-[#FAF7F2] text-[#1C1917] font-sans antialiased selection:bg-[#F2D7DC] selection:text-[#721523]">
+      <body 
+        className="min-h-screen bg-[#FAF7F2] text-[#1C1917] font-sans antialiased selection:bg-[#F2D7DC] selection:text-[#721523]"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

@@ -88,6 +88,41 @@ BEGIN;
   $$;
 COMMIT;
 
+-- 6. Tabela de Devotos (Visitantes Cadastrados com Nome e Santo de Devoção)
+CREATE TABLE IF NOT EXISTS public.devotees (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  favorite_saint TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.devotees ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Permitir cadastro de devotos" ON public.devotees;
+DROP POLICY IF EXISTS "Permitir leitura de devotos" ON public.devotees;
+DROP POLICY IF EXISTS "Permitir atualização de devoto" ON public.devotees;
+
+CREATE POLICY "Permitir cadastro de devotos" ON public.devotees FOR INSERT WITH CHECK (true);
+CREATE POLICY "Permitir leitura de devotos" ON public.devotees FOR SELECT USING (true);
+CREATE POLICY "Permitir atualização de devoto" ON public.devotees FOR UPDATE USING (true) WITH CHECK (true);
+
+-- 7. Tabela de Intenções Gravadas no Caderno de Oração
+CREATE TABLE IF NOT EXISTS public.intentions (
+  id TEXT PRIMARY KEY,
+  devotee_name TEXT,
+  intention TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.intentions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Permitir registro de intenções" ON public.intentions;
+DROP POLICY IF EXISTS "Permitir leitura de intenções" ON public.intentions;
+
+CREATE POLICY "Permitir registro de intenções" ON public.intentions FOR INSERT WITH CHECK (true);
+CREATE POLICY "Permitir leitura de intenções" ON public.intentions FOR SELECT USING (true);
+
+
 -- 6. Sementes Iniciais (Velas Devocionais da Comunidade)
 INSERT INTO public.candles (
   id, devotee_name, location, intention, type, saint_id, saint_name, saint_image, lit_at, duration_hours, prayer_count

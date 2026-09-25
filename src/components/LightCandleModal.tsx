@@ -12,11 +12,12 @@ export function LightCandleModal() {
     setIsLightCandleModalOpen,
     addCandle,
     userIntention,
+    devoteeProfile,
   } = useNovena();
 
   const [candleType, setCandleType] = useState<CandleType>("7_days");
   const [selectedSaintId, setSelectedSaintId] = useState<string>("santa-teresinha");
-  const [devoteeName, setDevoteeName] = useState<string>("");
+  const [devoteeName, setDevoteeName] = useState<string>(devoteeProfile?.name || "");
   const [location, setLocation] = useState<string>("");
   const [intention, setIntention] = useState<string>(userIntention || "");
   const [isLighting, setIsLighting] = useState<boolean>(false);

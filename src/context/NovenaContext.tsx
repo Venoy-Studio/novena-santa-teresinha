@@ -9,7 +9,11 @@ import {
   fetchCandlesFromStore, 
   persistNewCandle, 
   persistCandlePrayer, 
-  subscribeToCandleChanges 
+  subscribeToCandleChanges,
+  DevoteeProfile,
+  getLocalDevoteeProfile,
+  registerDevotee,
+  persistDevoteeIntention
 } from "@/services/candleService";
 
 interface NovenaContextType {
@@ -35,6 +39,10 @@ interface NovenaContextType {
   setIsSharePrayerModalOpen: (open: boolean) => void;
   isLightCandleModalOpen: boolean;
   setIsLightCandleModalOpen: (open: boolean) => void;
+  isWelcomeModalOpen: boolean;
+  setIsWelcomeModalOpen: (open: boolean) => void;
+  devoteeProfile: DevoteeProfile | null;
+  saveDevotee: (name: string, favoriteSaint?: string) => Promise<void>;
   candles: LitCandle[];
   isRealtimeActive: boolean;
   addCandle: (candleData: {
@@ -112,12 +120,26 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     return INITIAL_CANDLES;
   });
 
+  const [devoteeProfile, setDevoteeProfile] = useState<DevoteeProfile | null>(() => getLocalDevoteeProfile());
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return !localStorage.getItem("novena_teresa_devotee_profile");
+  });
+
   const [isRealtimeActive, setIsRealtimeActive] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isContemplativeMode, setIsContemplativeMode] = useState<boolean>(false);
   const [isIntentionModalOpen, setIsIntentionModalOpen] = useState<boolean>(false);
   const [isSharePrayerModalOpen, setIsSharePrayerModalOpen] = useState<boolean>(false);
   const [isLightCandleModalOpen, setIsLightCandleModalOpen] = useState<boolean>(false);
+
+  const saveDevotee = async (name: string, favoriteSaint?: string) => {
+    const profile = await registerDevotee(name, favoriteSaint);
+    setDevoteeProfile(profile);
+    setIsWelcomeModalOpen(false);
+    triggerRosePetalsShower();
+    prayerAudio.playRoseCelebration();
+  };
 
   // Load candles from Supabase / Store and listen to real-time additions/prayers
   useEffect(() => {
@@ -169,6 +191,7 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
+    persistDevoteeIntention(devoteeProfile?.name || "Devoto(a) em Oração", intention);
   };
 
   const markDayCompleted = (day: number) => {
@@ -278,7 +301,7 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     const durationHours = candleData.type === "7_days" ? 168 : 24;
     const newCandle: LitCandle = {
       id: `candle-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      devoteeName: candleData.devoteeName.trim() || "Devoto de Santa Teresinha",
+      devoteeName: candleData.devoteeName.trim() || devoteeProfile?.name || "Devoto(a) de Santa Teresinha",
       location: candleData.location?.trim() || undefined,
       intention: candleData.intention.trim(),
       type: candleData.type,
@@ -348,6 +371,10 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
         setIsLightCandleModalOpen,
         candles,
         isRealtimeActive,
+        isWelcomeModalOpen,
+        setIsWelcomeModalOpen,
+        devoteeProfile,
+        saveDevotee,
         addCandle,
         prayForCandle,
       }}

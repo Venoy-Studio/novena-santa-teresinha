@@ -18,7 +18,8 @@ export function Hero() {
     userIntention, 
     setIsIntentionModalOpen, 
     setIsContemplativeMode,
-    setIsLightCandleModalOpen
+    setIsLightCandleModalOpen,
+    devoteeProfile,
   } = useNovena();
 
   return (
@@ -46,7 +47,11 @@ export function Hero() {
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E5DAC9] text-[#731524] text-[11px] sm:text-xs font-bold shadow-2xs tracking-wider uppercase font-display">
             <span className="w-2 h-2 rounded-full bg-[#8E1C2E] animate-pulse" />
-            Doutora da Igreja & Padroeira das Missões
+            {devoteeProfile ? (
+              <span>Paz e Bem, {devoteeProfile.name.split(" ")[0]}! {devoteeProfile.favoriteSaint ? `• Devoção a ${devoteeProfile.favoriteSaint}` : ""}</span>
+            ) : (
+              <span>Doutora da Igreja & Padroeira das Missões</span>
+            )}
           </div>
         </div>
 

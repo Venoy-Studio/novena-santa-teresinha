@@ -228,3 +228,90 @@ export function subscribeToCandleChanges(
     client.removeChannel(channel);
   };
 }
+
+export interface DevoteeProfile {
+  id: string;
+  name: string;
+  favoriteSaint?: string;
+  createdAt?: string;
+}
+
+const DEVOTEE_PROFILE_KEY = "novena_teresa_devotee_profile";
+
+export function getLocalDevoteeProfile(): DevoteeProfile | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(DEVOTEE_PROFILE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
+export function saveLocalDevoteeProfile(profile: DevoteeProfile) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(DEVOTEE_PROFILE_KEY, JSON.stringify(profile));
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Register or update devotee in Supabase and LocalStorage
+ */
+export async function registerDevotee(
+  name: string,
+  favoriteSaint?: string
+): Promise<DevoteeProfile> {
+  const existing = getLocalDevoteeProfile();
+  const id = existing?.id || `devotee-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  const profile: DevoteeProfile = {
+    id,
+    name: name.trim(),
+    favoriteSaint: favoriteSaint?.trim() || undefined,
+    createdAt: new Date().toISOString(),
+  };
+
+  saveLocalDevoteeProfile(profile);
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      await supabase.from("devotees").upsert([
+        {
+          id: profile.id,
+          name: profile.name,
+          favorite_saint: profile.favoriteSaint || null,
+        },
+      ]);
+    } catch (err) {
+      console.warn("Could not save devotee to Supabase:", err);
+    }
+  }
+
+  return profile;
+}
+
+/**
+ * Save intention to Supabase and LocalStorage
+ */
+export async function persistDevoteeIntention(
+  devoteeName: string,
+  intention: string
+): Promise<void> {
+  if (isSupabaseConfigured() && supabase && intention.trim()) {
+    try {
+      await supabase.from("intentions").insert([
+        {
+          id: `intention-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          devotee_name: devoteeName.trim() || "Devoto(a) em Oração",
+          intention: intention.trim(),
+        },
+      ]);
+    } catch (err) {
+      console.warn("Could not save intention to Supabase:", err);
+    }
+  }
+}
+
