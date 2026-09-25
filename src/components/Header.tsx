@@ -38,120 +38,123 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8DCD1] transition-all">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8DCD1] transition-all shadow-[0_2px_15px_rgba(42,8,14,0.03)]">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4 lg:gap-8">
           
           {/* Brand Logo & Title */}
           <a 
             href="#" 
-            className="flex items-center gap-2.5 sm:gap-3 group text-left focus:outline-none focus:ring-2 focus:ring-[#8E1C2E] rounded-md p-1"
+            className="flex items-center gap-3 sm:gap-3.5 group text-left focus:outline-none focus:ring-2 focus:ring-[#8E1C2E] rounded-xl p-1 shrink-0 whitespace-nowrap"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#8E1C2E] to-[#570F1A] flex items-center justify-center text-white shadow-sm ring-2 ring-[#EED074]/60 group-hover:scale-105 transition-transform shrink-0">
-              <svg 
-                className="w-5 h-5 text-[#FAF7F2]" 
-                viewBox="0 0 24 24" 
-                fill="currentColor"
-              >
-                <path d="M12 2C10.5 5 8 7 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7 13.5 5 12 2Z" opacity="0.85"/>
-                <path d="M6 11C4 13 4 16 6 18C7.5 19.5 9.5 19.5 11 18.5C10 16.5 10 14 12 13C9 11 7 10 6 11Z" opacity="0.75"/>
-                <path d="M18 11C20 13 20 16 18 18C16.5 19.5 14.5 19.5 13 18.5C14 16.5 14 14 12 13C15 11 17 10 18 11Z" opacity="0.75"/>
-                <path d="M12 15C10 18 10 20 12 22C14 20 14 18 12 15Z" opacity="0.9"/>
-              </svg>
+            <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden ring-2 ring-[#C89B27] shadow-md group-hover:scale-105 transition-transform shrink-0">
+              <Image
+                src="/images/santa-teresinha.jpg"
+                alt="Santa Teresinha"
+                fill
+                sizes="48px"
+                className="object-cover"
+              />
             </div>
-            <div>
-              <span className="block text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-[#8E1C2E] font-display">
+            <div className="flex flex-col justify-center">
+              <span className="block text-[11px] sm:text-xs font-bold tracking-[0.18em] uppercase text-[#8E1C2E] font-display leading-tight">
                 Carmelo de Lisieux
               </span>
-              <span className="block text-sm sm:text-base md:text-lg font-serif font-bold text-[#1C1917] leading-tight">
+              <span className="block text-lg sm:text-xl md:text-2xl font-serif font-bold text-[#2A080E] tracking-tight leading-snug">
                 Novena das Rosas
               </span>
             </div>
           </a>
 
-          {/* Desktop Nav Links (Large Screens) */}
-          <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-[#44403C]">
+          {/* Desktop Nav Links (Clean, Spacious, No Jump) */}
+          <nav className="hidden xl:flex items-center gap-6 2xl:gap-8 text-sm font-semibold text-[#44403C]">
             <a 
               href="#jornada" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group shrink-0"
             >
-              Os 9 Dias
+              <span>Os 9 Dias</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#8E1C2E] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
             <a 
               href="#oracao" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group shrink-0"
             >
-              Rezar Agora
+              <span>Rezar Agora</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#8E1C2E] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
             <a 
               href="#capela-velas" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E] flex items-center gap-1 text-[#8C6A17] font-semibold"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group flex items-center gap-1.5 text-[#8C6A17] shrink-0"
             >
-              <Flame className="w-3.5 h-3.5 fill-current" />
-              <span>Capela das Velas</span>
+              <Flame className="w-4 h-4 fill-current text-[#C89B27] animate-pulse" />
+              <span className="font-bold">Capela das Velas</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#C89B27] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
             <a 
               href="#milagres" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group shrink-0"
             >
-              Milagres
+              <span>Milagres</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#8E1C2E] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
             <a 
               href="#historia" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group shrink-0"
             >
-              História
+              <span>História</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#8E1C2E] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
             <a 
               href="#faq" 
-              className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
+              className="relative py-2 hover:text-[#8E1C2E] transition-colors whitespace-nowrap group shrink-0"
             >
-              Dúvidas
+              <span>Dúvidas</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#8E1C2E] scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
             </a>
           </nav>
 
           {/* Action Controls */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             
+            {/* Progress pill on PC */}
+            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF0D4] border border-[#EED074] text-[#8C6A17] text-xs font-bold whitespace-nowrap shadow-2xs shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-[#C89B27]" />
+              <span>{completedCount}/9 dias rezados</span>
+            </div>
+
             {/* Desktop Light candle button */}
             <button
               onClick={() => setIsLightCandleModalOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#FAF0D4] text-[#8C6A17] border border-[#EED074] hover:bg-[#F9ECC4] transition-colors shadow-2xs cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#FAF0D4] text-[#8C6A17] border border-[#EED074] hover:bg-[#F9ECC4] hover:scale-102 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
               title="Acender uma Vela Virtual"
             >
-              <Flame className="w-3.5 h-3.5 fill-current" />
+              <Flame className="w-3.5 h-3.5 fill-current text-[#C89B27]" />
               <span>Acender Vela</span>
             </button>
 
-            {/* Desktop Share prayer button */}
+            {/* Contemplative Mode Button */}
             <button
-              onClick={() => setIsSharePrayerModalOpen(true)}
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#FDE8EB] text-[#8E1C2E] border border-[#F8C7CE] hover:bg-[#FCE7E9] transition-colors shadow-2xs cursor-pointer"
-              title="Compartilhar Oração da Novena"
+              onClick={() => setIsContemplativeMode(true)}
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#8E1C2E] text-white hover:bg-[#731524] hover:scale-102 transition-all shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+              title="Abrir Modo Capela de Oração sem distrações"
             >
-              <Share2 className="w-3.5 h-3.5" />
-              <span>Compartilhar</span>
+              <Flame className="w-3.5 h-3.5 text-[#EED074]" />
+              <span>Modo Capela</span>
             </button>
 
             {/* Desktop Intention button */}
             <button
               onClick={() => setIsIntentionModalOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white text-[#570F1A] border border-[#DFCFBE] hover:bg-[#FAF7F2] transition-colors shadow-2xs cursor-pointer"
+              className="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold bg-white text-[#570F1A] border border-[#DFCFBE] hover:bg-[#FAF7F2] transition-colors shadow-2xs cursor-pointer whitespace-nowrap shrink-0"
               title="Abrir Meu Caderno de Intenções"
             >
               <HeartHandshake className="w-3.5 h-3.5 text-[#8E1C2E]" />
               <span>Meu Pedido</span>
             </button>
 
-            {/* Desktop Progress pill */}
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF0D4] border border-[#EED074] text-[#8C6A17] text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-[#C89B27]" />
-              <span>{completedCount}/9 dias</span>
-            </div>
-
             {/* Sound Toggle */}
             <button
               onClick={toggleSound}
-              className={`p-1.5 sm:p-2 rounded-full border transition-colors cursor-pointer ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
                 soundEnabled 
                   ? "bg-white border-[#E8DCD1] text-[#8E1C2E] hover:bg-[#FDF2F3]" 
                   : "bg-[#EEE7DC] border-[#DFCFBE] text-[#78716C] hover:bg-[#E5DAC9]"
@@ -162,20 +165,10 @@ export function Header() {
               {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </button>
 
-            {/* Contemplative Mode Button */}
-            <button
-              onClick={() => setIsContemplativeMode(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#8E1C2E] text-white hover:bg-[#731524] transition-all shadow-sm cursor-pointer"
-              title="Abrir Modo Capela de Oração sem distrações"
-            >
-              <Flame className="w-3.5 h-3.5 text-[#EED074]" />
-              <span>Modo Capela</span>
-            </button>
-
-            {/* Mobile hamburger button */}
+            {/* Mobile / Laptop Hamburger button (opens full drawer) */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-[#570F1A] bg-white border border-[#E8DCD1] hover:bg-[#EEE7DC] transition-colors cursor-pointer"
+              className="xl:hidden p-2 sm:p-2.5 rounded-xl text-[#570F1A] bg-white border border-[#E8DCD1] hover:bg-[#EEE7DC] transition-colors cursor-pointer shrink-0"
               aria-label="Abrir Menu Completo"
             >
               <Menu className="w-5 h-5" />

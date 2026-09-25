@@ -32,41 +32,41 @@ export function Hero() {
         {/* Sacred Cameo & Liturgical Tag */}
         <div className="flex flex-col items-center justify-center mb-3 sm:mb-4">
           
-          {/* Saint Therese Cameo */}
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden ring-3 ring-[#EED074] shadow-md mb-3 transform hover:scale-105 transition-transform duration-300">
+          {/* Saint Therese Cameo with Golden Halo */}
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden ring-4 ring-[#EED074]/90 shadow-xl mb-3.5 transform hover:scale-105 transition-transform duration-300 glow-gold">
             <Image
               src="/images/santa-teresinha.jpg"
               alt="Santa Teresinha do Menino Jesus"
               fill
-              sizes="(max-width: 640px) 80px, 96px"
+              sizes="(max-width: 640px) 80px, 112px"
               priority
               className="object-cover"
             />
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white border border-[#E5DAC9] text-[#731524] text-[10px] sm:text-xs font-semibold shadow-2xs tracking-wider uppercase font-display">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#8E1C2E] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E5DAC9] text-[#731524] text-[11px] sm:text-xs font-bold shadow-2xs tracking-wider uppercase font-display">
+            <span className="w-2 h-2 rounded-full bg-[#8E1C2E] animate-pulse" />
             Doutora da Igreja & Padroeira das Missões
           </div>
         </div>
 
         {/* Hero Title & Quote */}
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-[#2A080E] tracking-tight leading-[1.2]">
+        <div className="text-center max-w-4xl mx-auto">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#2A080E] tracking-tight leading-[1.15]">
             Novena das Rosas de Santa Teresinha do Menino Jesus
           </h1>
 
           <div className="my-3 sm:my-5 flex items-center justify-center gap-3">
-            <div className="h-px w-10 sm:w-12 bg-gradient-to-r from-transparent to-[#C89B27]" />
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent to-[#C89B27]" />
             <span className="text-[#C89B27] text-base sm:text-lg">✝</span>
-            <div className="h-px w-10 sm:w-12 bg-gradient-to-l from-transparent to-[#C89B27]" />
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-l from-transparent to-[#C89B27]" />
           </div>
 
-          <blockquote className="font-serif-sacred italic text-base sm:text-xl md:text-2xl text-[#570F1A] font-medium leading-relaxed max-w-2xl mx-auto px-2">
+          <blockquote className="font-serif-sacred italic text-base sm:text-xl md:text-2xl lg:text-3xl text-[#570F1A] font-medium leading-relaxed max-w-3xl mx-auto px-2">
             “Passarei o meu Céu a fazer o bem sobre a Terra. Farei cair do Céu uma chuva de rosas.”
           </blockquote>
           
-          <p className="mt-2 text-[11px] sm:text-xs text-[#78716C] font-medium">
+          <p className="mt-2.5 text-xs sm:text-sm text-[#78716C] font-medium">
             — Santa Teresa do Menino Jesus e da Sagrada Face (1873 – 1897)
           </p>
         </div>
