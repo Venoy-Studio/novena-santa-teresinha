@@ -1,10 +1,16 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { NOVENA_DAYS, DayNovena } from "@/data/novenaData";
 import { LitCandle, INITIAL_CANDLES, CandleType } from "@/data/candleData";
 import { triggerRosePetalsShower } from "@/utils/confettiRoses";
 import { prayerAudio } from "@/utils/audioChime";
+import { 
+  fetchCandlesFromStore, 
+  persistNewCandle, 
+  persistCandlePrayer, 
+  subscribeToCandleChanges 
+} from "@/services/candleService";
 
 interface NovenaContextType {
   currentDay: number;
@@ -30,6 +36,7 @@ interface NovenaContextType {
   isLightCandleModalOpen: boolean;
   setIsLightCandleModalOpen: (open: boolean) => void;
   candles: LitCandle[];
+  isRealtimeActive: boolean;
   addCandle: (candleData: {
     devoteeName: string;
     location?: string;
@@ -105,11 +112,45 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     return INITIAL_CANDLES;
   });
 
+  const [isRealtimeActive, setIsRealtimeActive] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isContemplativeMode, setIsContemplativeMode] = useState<boolean>(false);
   const [isIntentionModalOpen, setIsIntentionModalOpen] = useState<boolean>(false);
   const [isSharePrayerModalOpen, setIsSharePrayerModalOpen] = useState<boolean>(false);
   const [isLightCandleModalOpen, setIsLightCandleModalOpen] = useState<boolean>(false);
+
+  // Load candles from Supabase / Store and listen to real-time additions/prayers
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCandlesFromStore().then(({ candles: loadedCandles, isRemote }) => {
+      if (isMounted) {
+        setCandles(loadedCandles);
+        setIsRealtimeActive(isRemote);
+      }
+    });
+
+    const unsubscribe = subscribeToCandleChanges(
+      (newCandle) => {
+        if (!isMounted) return;
+        setCandles((prev) => {
+          if (prev.some((c) => c.id === newCandle.id)) return prev;
+          return [newCandle, ...prev];
+        });
+      },
+      (candleId, newPrayerCount) => {
+        if (!isMounted) return;
+        setCandles((prev) =>
+          prev.map((c) => (c.id === candleId ? { ...c, prayerCount: newPrayerCount } : c))
+        );
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const setCurrentDay = (day: number) => {
     if (day < 1 || day > 9) return;
@@ -261,6 +302,9 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
       return updated;
     });
 
+    // Persist to Supabase asynchronously (with automatic local fallback)
+    persistNewCandle(newCandle);
+
     triggerRosePetalsShower();
     prayerAudio.playRoseCelebration();
     return newCandle;
@@ -271,6 +315,8 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     setCandles((prev) =>
       prev.map((c) => (c.id === id ? { ...c, prayerCount: c.prayerCount + 1 } : c))
     );
+    // Persist prayer to Supabase asynchronously
+    persistCandlePrayer(id);
   };
 
   const selectedDayData = NOVENA_DAYS[currentDay - 1] || NOVENA_DAYS[0];
@@ -301,6 +347,7 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
         isLightCandleModalOpen,
         setIsLightCandleModalOpen,
         candles,
+        isRealtimeActive,
         addCandle,
         prayForCandle,
       }}

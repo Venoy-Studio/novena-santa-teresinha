@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export function VirtualCandleChapel() {
-  const { candles, prayForCandle, setIsLightCandleModalOpen } = useNovena();
+  const { candles, prayForCandle, setIsLightCandleModalOpen, isRealtimeActive } = useNovena();
 
   const [activeTab, setActiveTab] = useState<"all" | "7_days" | "24_hours" | "mine">("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,9 +88,26 @@ export function VirtualCandleChapel() {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#382622] border border-[#C89B27]/50 text-[#EED074] text-xs font-semibold uppercase tracking-wider font-display mb-3">
-            <Flame className="w-3.5 h-3.5 text-[#C89B27] animate-pulse" />
-            Altar Votivo Perpétuo
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#382622] border border-[#C89B27]/50 text-[#EED074] text-xs font-semibold uppercase tracking-wider font-display">
+              <Flame className="w-3.5 h-3.5 text-[#C89B27] animate-pulse" />
+              Altar Votivo Perpétuo
+            </div>
+
+            {isRealtimeActive ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-[11px] font-medium shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>Ao Vivo • Supabase Sincronizado</span>
+              </span>
+            ) : (
+              <span 
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2A1E1B] border border-[#44302B] text-[#D6C5B8] text-[11px] font-medium" 
+                title="Para sincronizar em tempo real com todo o mundo, adicione suas credenciais do Supabase no .env.local"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C89B27]" />
+                <span>Altar Comunitário</span>
+              </span>
+            )}
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
