@@ -108,12 +108,32 @@ export function Footer() {
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#381016] text-[#EED074] hover:bg-[#4A101A] transition-colors border border-[#570F1A]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#381016] text-[#EED074] hover:bg-[#4A101A] transition-colors border border-[#570F1A] cursor-pointer"
             title="Voltar ao Topo"
           >
             <span>Voltar ao Início</span>
             <ChevronUp className="w-3.5 h-3.5" />
           </button>
+        </div>
+
+        {/* Studio Credits & Non-profit Dedication */}
+        <div className="mt-6 pt-6 border-t border-[#4A101A]/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#A89E9A]">
+          <p className="text-center sm:text-left">
+            Desenvolvido com 💚 por{" "}
+            <a
+              href="https://venoystudio.online"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#EED074] hover:text-white font-semibold underline underline-offset-4 decoration-[#C89B27]/60 hover:decoration-white transition-colors"
+            >
+              venoy studio
+            </a>{" "}
+            sem fins lucrativos
+          </p>
+
+          <span className="text-[11px] text-[#8C7E7A] text-center sm:text-right">
+            Uma obra devocional feita com amor para toda a comunidade de fiéis.
+          </span>
         </div>
 
       </div>
