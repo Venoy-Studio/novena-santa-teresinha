@@ -5,7 +5,7 @@ import { ChevronUp, HeartHandshake, Sparkles } from "lucide-react";
 import { useNovena } from "@/context/NovenaContext";
 
 export function Footer() {
-  const { setIsIntentionModalOpen, setIsContemplativeMode } = useNovena();
+  const { devoteeProfile, setIsIntentionModalOpen, setIsContemplativeMode } = useNovena();
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -75,7 +75,15 @@ export function Footer() {
               Espaço de Oração
             </span>
             <p className="text-xs text-[#D6C5B8] leading-relaxed">
-              Mantenha sua prece viva. Você pode registrar sua intenção a qualquer momento ou rezar em silêncio no Modo Capela.
+              {devoteeProfile?.name ? (
+                <>
+                  Paz e bem, <strong>{devoteeProfile.name}</strong>. Mantenha sua prece viva registrando sua intenção ou rezando no Modo Capela.
+                </>
+              ) : (
+                <>
+                  Mantenha sua prece viva. Você pode registrar sua intenção a qualquer momento ou rezar em silêncio no Modo Capela.
+                </>
+              )}
             </p>
             <div className="flex flex-col gap-2 pt-1">
               <button
@@ -83,7 +91,9 @@ export function Footer() {
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#570F1A] hover:bg-[#731524] text-white text-xs font-semibold transition-colors border border-[#731524]"
               >
                 <HeartHandshake className="w-3.5 h-3.5 text-[#EED074]" />
-                <span>Registrar Meu Pedido Pessoal</span>
+                <span>
+                  {devoteeProfile?.name ? `Intenção de ${devoteeProfile.name.split(" ")[0]}` : "Registrar Meu Pedido Pessoal"}
+                </span>
               </button>
               <button
                 onClick={() => setIsContemplativeMode(true)}

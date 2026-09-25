@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export function VirtualCandleChapel() {
-  const { candles, prayForCandle, setIsLightCandleModalOpen, isRealtimeActive } = useNovena();
+  const { candles, prayForCandle, setIsLightCandleModalOpen, isRealtimeActive, devoteeProfile } = useNovena();
 
   const [activeTab, setActiveTab] = useState<"all" | "7_days" | "24_hours" | "mine">("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,12 +29,19 @@ export function VirtualCandleChapel() {
     return () => clearInterval(timer);
   }, []);
 
+  const isCandleMine = (candle: LitCandle) => {
+    return (
+      candle.isUserOwned ||
+      (!!devoteeProfile?.name && candle.devoteeName.trim().toLowerCase() === devoteeProfile.name.trim().toLowerCase())
+    );
+  };
+
   const filteredCandles = useMemo(() => {
     return candles.filter((candle) => {
       // Tab filter
       if (activeTab === "7_days" && candle.type !== "7_days") return false;
       if (activeTab === "24_hours" && candle.type !== "24_hours") return false;
-      if (activeTab === "mine" && !candle.isUserOwned) return false;
+      if (activeTab === "mine" && !isCandleMine(candle)) return false;
 
       // Search query
       if (searchQuery.trim()) {
@@ -48,11 +55,11 @@ export function VirtualCandleChapel() {
 
       return true;
     });
-  }, [candles, activeTab, searchQuery]);
+  }, [candles, activeTab, searchQuery, devoteeProfile?.name]);
 
   const count7Days = candles.filter((c) => c.type === "7_days").length;
   const count24Hours = candles.filter((c) => c.type === "24_hours").length;
-  const countMine = candles.filter((c) => c.isUserOwned).length;
+  const countMine = candles.filter((c) => isCandleMine(c)).length;
 
   const handlePray = (id: string) => {
     prayForCandle(id);
@@ -114,7 +121,15 @@ export function VirtualCandleChapel() {
             Capela Virtual das Velas
           </h2>
           <p className="text-xs sm:text-sm text-[#D6C5B8] mt-2.5 leading-relaxed">
-            Acenda uma vela votiva de <strong>7 dias</strong> com o rosto de <strong>Santa Teresinha</strong> ou uma vela de <strong>24 horas</strong> com o seu Santo de devoção. Deixe gravada sua prece e receba as orações de toda a comunidade.
+            {devoteeProfile?.name ? (
+              <>
+                Paz e Bem, <strong>{devoteeProfile.name}</strong>. Acenda uma vela votiva de <strong>7 dias</strong> com o rosto de <strong>Santa Teresinha</strong> ou uma vela de <strong>24 horas</strong> com o seu Santo de devoção. Deixe gravada sua prece e receba as orações de toda a comunidade.
+              </>
+            ) : (
+              <>
+                Acenda uma vela votiva de <strong>7 dias</strong> com o rosto de <strong>Santa Teresinha</strong> ou uma vela de <strong>24 horas</strong> com o seu Santo de devoção. Deixe gravada sua prece e receba as orações de toda a comunidade.
+              </>
+            )}
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -123,7 +138,9 @@ export function VirtualCandleChapel() {
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#C89B27] to-[#A88120] hover:from-[#DFB23E] hover:to-[#C89B27] text-[#2A080E] text-sm font-bold shadow-lg hover:shadow-xl hover:scale-102 transition-all cursor-pointer"
             >
               <Flame className="w-4 h-4 fill-current text-[#570F1A]" />
-              <span>Acender uma Vela no Altar</span>
+              <span>
+                {devoteeProfile?.name ? `Acender Vela de ${devoteeProfile.name.split(" ")[0]}` : "Acender uma Vela no Altar"}
+              </span>
             </button>
           </div>
         </div>
@@ -177,7 +194,9 @@ export function VirtualCandleChapel() {
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Minhas Velas ({countMine})</span>
+                  <span>
+                    {devoteeProfile?.name ? `Velas de ${devoteeProfile.name.split(" ")[0]}` : "Minhas Velas"} ({countMine})
+                  </span>
                 </button>
               )}
             </div>
@@ -203,25 +222,36 @@ export function VirtualCandleChapel() {
             {filteredCandles.map((candle) => {
               const hasPrayed = prayedCandleIds.includes(candle.id);
               const is7Days = candle.type === "7_days";
+              const isMine = isCandleMine(candle);
 
               return (
                 <div
                   key={candle.id}
                   className={`rounded-3xl p-5 border transition-all flex flex-col justify-between relative ${
-                    is7Days
+                    isMine
+                      ? "ring-2 ring-[#C89B27]/70 bg-gradient-to-b from-[#33211D] to-[#251A18] border-[#EED074] shadow-xl"
+                      : is7Days
                       ? "bg-gradient-to-b from-[#2F201C] to-[#241916] border-[#EED074]/60 shadow-lg hover:border-[#EED074]"
                       : "bg-[#251A18] border-[#44302B] hover:border-[#8E1C2E]/60 shadow-md"
                   }`}
                 >
                   {/* Top Bar of Card */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
-                      is7Days
-                        ? "bg-[#FAF0D4] text-[#731524] border-[#EED074]"
-                        : "bg-[#382622] text-[#EED074] border-[#44302B]"
-                    }`}>
-                      {is7Days ? "🌹 Vela de 7 Dias" : "🕯️ Vela de 24 Horas"}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                        is7Days
+                          ? "bg-[#FAF0D4] text-[#731524] border-[#EED074]"
+                          : "bg-[#382622] text-[#EED074] border-[#44302B]"
+                      }`}>
+                        {is7Days ? "🌹 Vela de 7 Dias" : "🕯️ Vela de 24 Horas"}
+                      </span>
+                      {isMine && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8E1C2E] text-white border border-[#EED074]/60 flex items-center gap-1 shadow-xs animate-fadeIn">
+                          <Sparkles className="w-2.5 h-2.5 text-[#EED074]" />
+                          Sua Vela
+                        </span>
+                      )}
+                    </div>
 
                     <span className="text-[11px] text-[#A89E9A] flex items-center gap-1 font-mono">
                       <Clock className="w-3 h-3 text-[#C89B27]" />

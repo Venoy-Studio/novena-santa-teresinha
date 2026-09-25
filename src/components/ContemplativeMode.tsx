@@ -25,7 +25,8 @@ export function ContemplativeMode() {
     resetGloria,
     soundEnabled,
     toggleSound,
-    markDayCompleted
+    markDayCompleted,
+    devoteeProfile,
   } = useNovena();
 
   const [step, setStep] = useState<number>(1);
@@ -113,9 +114,15 @@ export function ContemplativeMode() {
               Em Nome do Pai, do Filho e do Espírito Santo. Amém.
             </h3>
 
+            {devoteeProfile?.name && (
+              <p className="text-xs font-serif text-[#EED074]">
+                Paz e Bem, <strong>{devoteeProfile.name}</strong>. Recolha a sua alma e prepare o seu coração para este momento de graça.
+              </p>
+            )}
+
             <div className="p-5 rounded-2xl bg-[#251A18] border border-[#442D28] text-left">
               <span className="text-xs font-bold uppercase tracking-wider text-[#EED074] block mb-2">
-                Apresente a sua Intenção:
+                {devoteeProfile?.name ? `Intenção de ${devoteeProfile.name}:` : "Apresente a sua Intenção:"}
               </span>
               <p className={`font-serif italic text-[#E5DAC9] ${getFontSizeClass()}`}>
                 {userIntention 
@@ -167,7 +174,9 @@ export function ContemplativeMode() {
                 “Santíssima Trindade, Pai, Filho e Espírito Santo, eu Vos agradeço todos os favores, todas as graças com que enriquecestes a alma de Vossa serva Teresa do Menino Jesus durante os 24 anos que passou na Terra.
               </p>
               <p>
-                Pelos méritos de tão querida santinha, concedei-me a graça que ardentemente Vos peço:{" "}
+                Pelos méritos de tão querida santinha, concedei{devoteeProfile?.name ? (
+                  <> a mim, vosso(a) servo(a) <strong className="text-[#EED074]">{devoteeProfile.name}</strong>,</>
+                ) : "-me"} a graça que ardentemente Vos peço:{" "}
                 <strong className="text-[#EED074]">
                   {userIntention ? userIntention : "(faça seu pedido com fervor)"}
                 </strong>
@@ -266,9 +275,9 @@ export function ContemplativeMode() {
                   markDayCompleted(currentDay);
                   setIsContemplativeMode(false);
                 }}
-                className="px-6 py-3.5 rounded-xl bg-[#8E1C2E] hover:bg-[#A62438] text-white text-sm font-bold shadow-md"
+                className="px-6 py-3.5 rounded-xl bg-[#8E1C2E] hover:bg-[#A62438] text-white text-sm font-bold shadow-md cursor-pointer transition-colors"
               >
-                Concluir Dia e Voltar ao Site
+                Concluir Dia de Oração {devoteeProfile?.name ? `(${devoteeProfile.name.split(" ")[0]})` : ""} e Voltar ao Altar
               </button>
             </div>
           </div>

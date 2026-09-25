@@ -10,6 +10,7 @@ export function IntentionModal() {
     setUserIntention,
     isIntentionModalOpen,
     setIsIntentionModalOpen,
+    devoteeProfile,
   } = useNovena();
 
   if (!isIntentionModalOpen) return null;
@@ -17,6 +18,7 @@ export function IntentionModal() {
   return (
     <IntentionModalDialog
       initialIntention={userIntention}
+      devoteeName={devoteeProfile?.name}
       onSave={(val) => {
         setUserIntention(val);
       }}
@@ -27,10 +29,12 @@ export function IntentionModal() {
 
 function IntentionModalDialog({
   initialIntention,
+  devoteeName,
   onSave,
   onClose,
 }: {
   initialIntention: string;
+  devoteeName?: string;
   onSave: (val: string) => void;
   onClose: () => void;
 }) {
@@ -70,10 +74,12 @@ function IntentionModalDialog({
             </div>
             <div>
               <h3 className="font-serif font-bold text-lg text-[#2A080E]">
-                Meu Livro de Intenções
+                {devoteeName ? `Caderno de Intenções • ${devoteeName.split(" ")[0]}` : "Meu Livro de Intenções"}
               </h3>
               <p className="text-xs text-[#78716C]">
-                Apresente seu pedido a Santa Teresinha do Menino Jesus
+                {devoteeName 
+                  ? `Apresente a sua súplica particular a Santa Teresinha do Menino Jesus` 
+                  : "Apresente seu pedido a Santa Teresinha do Menino Jesus"}
               </p>
             </div>
           </div>
@@ -93,14 +99,14 @@ function IntentionModalDialog({
               htmlFor="intention-text" 
               className="block text-xs font-bold uppercase tracking-wider text-[#570F1A] mb-2"
             >
-              Graça que ardentemente peço nesta novena:
+              {devoteeName ? `Graça que você, ${devoteeName}, pede nesta novena:` : "Graça que ardentemente peço nesta novena:"}
             </label>
             <textarea
               id="intention-text"
               rows={4}
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="Ex: Peço a intercessão de Santa Teresinha pela saúde de minha família, por conversão e por paz no coração..."
+              placeholder={devoteeName ? `Ex: ${devoteeName.split(" ")[0]}, escreva aqui a intenção que traz no coração...` : "Ex: Peço a intercessão de Santa Teresinha pela saúde de minha família, por conversão e por paz no coração..."}
               className="w-full p-3.5 rounded-xl border border-[#DFCFBE] bg-white text-[#1C1917] text-sm focus:outline-none focus:ring-2 focus:ring-[#8E1C2E] focus:border-transparent placeholder:text-[#A8A29E]"
             />
           </div>

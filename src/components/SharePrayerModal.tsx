@@ -21,6 +21,7 @@ export function SharePrayerModal() {
     currentDay,
     selectedDayData,
     userIntention,
+    devoteeProfile,
   } = useNovena();
 
   const [copied, setCopied] = useState(false);
@@ -28,11 +29,13 @@ export function SharePrayerModal() {
   if (!isSharePrayerModalOpen) return null;
 
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://novenadasrosas.com.br";
+  const devoteeDisplayName = devoteeProfile?.name || "Devoto(a) de Santa Teresinha";
 
   const shareText = 
-    `🌹 *Eu acabei de rezar o ${currentDay}º Dia da Novena das Rosas de Santa Teresinha do Menino Jesus!*\n\n` +
+    `🌹 *Eu, ${devoteeDisplayName}, acabei de rezar o ${currentDay}º Dia da Novena das Rosas de Santa Teresinha do Menino Jesus!*\n\n` +
     `✨ _"${selectedDayData.quote}"_\n\n` +
-    (userIntention ? `🙏 _Intenção confiada à Santinha das Rosas._\n\n` : "") +
+    (userIntention ? `🙏 _Intenção particular: "${userIntention}"_\n\n` : "") +
+    (devoteeProfile?.favoriteSaint ? `🕊️ _Devoção a: ${devoteeProfile.favoriteSaint}_\n\n` : "") +
     `Venha rezar você também e acender uma vela virtual com sua intenção:\n` +
     `${siteUrl}`;
 
@@ -116,8 +119,8 @@ export function SharePrayerModal() {
               />
             </div>
 
-            <span className="inline-block px-3 py-1 rounded-full bg-[#FAF0D4] text-[#731524] text-[11px] font-bold uppercase tracking-wider font-display shadow-xs mb-2">
-              🌹 Eu Rezei Hoje
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#FAF0D4] text-[#731524] text-[11px] font-bold uppercase tracking-wider font-display shadow-xs mb-2">
+              🌹 Rezei com Devoção • {devoteeDisplayName}
             </span>
 
             <h4 className="font-serif font-bold text-xl sm:text-2xl text-[#FAF7F2] leading-tight">

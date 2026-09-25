@@ -28,6 +28,7 @@ export function PrayerDayView() {
     setIsContemplativeMode,
     setIsSharePrayerModalOpen,
     setIsLightCandleModalOpen,
+    devoteeProfile,
   } = useNovena();
 
   const [copiedPrayer, setCopiedPrayer] = useState(false);
@@ -44,7 +45,8 @@ export function PrayerDayView() {
 
   const handleCopyPrayer = () => {
     const text = 
-      `Novena das Rosas de Santa Teresinha - ${currentDay}º Dia: ${selectedDayData.title}\n\n` +
+      `Novena das Rosas de Santa Teresinha - ${currentDay}º Dia: ${selectedDayData.title}\n` +
+      (devoteeProfile ? `Devoto(a) em oração: ${devoteeProfile.name}\n\n` : "\n") +
       `"${selectedDayData.quote}"\n\n` +
       `Oração a Santa Teresinha:\n${formattedInitialPrayer}\n\n` +
       `Rezam-se 24 Glórias ao Pai com a jaculatória: "Santa Teresinha do Menino Jesus, rogai por nós!"\n\n` +
@@ -71,7 +73,7 @@ export function PrayerDayView() {
 
           <div className="text-center">
             <span className="inline-block px-3 py-1 rounded-full bg-[#FDE8EB] text-[#8E1C2E] text-xs font-bold uppercase tracking-wider font-display border border-[#F8C7CE]">
-              {selectedDayData.day}º Dia da Novena
+              {selectedDayData.day}º Dia {devoteeProfile ? `• Oração de ${devoteeProfile.name.split(" ")[0]}` : "da Novena"}
             </span>
             <span className="block text-xs font-semibold text-[#78716C] mt-1">
               {selectedDayData.theme}
@@ -176,7 +178,7 @@ export function PrayerDayView() {
               “Santíssima Trindade, Pai, Filho e Espírito Santo, eu Vos agradeço todos os favores, todas as graças com que enriquecestes a alma de Vossa serva Teresa do Menino Jesus durante os 24 anos que passou na Terra.
             </p>
             <p>
-              Pelos méritos de tão querida santinha, concedei-me a graça que ardentemente Vos peço:{" "}
+              Pelos méritos de tão querida santinha, concedei{devoteeProfile?.name ? <> a mim, vosso(a) servo(a) <strong className="text-[#8E1C2E] font-semibold">{devoteeProfile.name}</strong>,</> : "-me"} a graça que ardentemente Vos peço:{" "}
               <span className="inline px-2 py-0.5 rounded-md bg-[#FAF0D4] text-[#8E1C2E] font-semibold border border-[#EED074]">
                 {userIntention ? userIntention : "(faça aqui, com fé, o seu pedido particular)"}
               </span>

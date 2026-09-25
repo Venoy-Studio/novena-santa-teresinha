@@ -30,6 +30,8 @@ export function Header() {
     setIsIntentionModalOpen,
     setIsLightCandleModalOpen,
     setIsSharePrayerModalOpen,
+    setIsWelcomeModalOpen,
+    devoteeProfile,
   } = useNovena();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -141,6 +143,18 @@ export function Header() {
               <span>Modo Capela</span>
             </button>
 
+            {/* Desktop Devotee Greeting Button */}
+            {devoteeProfile && (
+              <button
+                onClick={() => setIsWelcomeModalOpen(true)}
+                className="hidden 2xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#DFCFBE] text-[#570F1A] text-xs font-semibold hover:border-[#8E1C2E] hover:bg-[#FAF7F2] transition-colors shadow-2xs whitespace-nowrap cursor-pointer shrink-0"
+                title="Editar seu nome ou santo de devoção"
+              >
+                <span>🕊️</span>
+                <span>Olá, <strong>{devoteeProfile.name.split(" ")[0]}</strong></span>
+              </button>
+            )}
+
             {/* Desktop Intention button */}
             <button
               onClick={() => setIsIntentionModalOpen(true)}
@@ -226,8 +240,46 @@ export function Header() {
             </div>
 
             {/* Drawer Body */}
-            <div className="p-5 space-y-5 flex-1">
+            <div className="p-5 space-y-4 flex-1">
               
+              {/* Devotee Profile Card */}
+              {devoteeProfile ? (
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#FAF0D4]/80 to-[#FDFBF7] border border-[#EED074] flex items-center justify-between shadow-2xs">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C6A17] block font-display">
+                      Devoto(a) em Oração:
+                    </span>
+                    <span className="font-serif font-bold text-base text-[#2A080E] block leading-tight">
+                      {devoteeProfile.name}
+                    </span>
+                    {devoteeProfile.favoriteSaint && (
+                      <span className="text-[11px] text-[#78716C] block mt-0.5">
+                        Devoção a {devoteeProfile.favoriteSaint}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setIsWelcomeModalOpen(true);
+                    }}
+                    className="text-xs font-bold text-[#8E1C2E] underline hover:text-[#731524] cursor-pointer shrink-0"
+                  >
+                    Alterar
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setIsWelcomeModalOpen(true);
+                  }}
+                  className="w-full p-3 rounded-2xl bg-[#FAF0D4] border border-[#EED074] text-[#8C6A17] text-xs font-bold text-center hover:bg-[#F9ECC4] transition-colors cursor-pointer"
+                >
+                  ✨ Registrar Meu Nome na Capela
+                </button>
+              )}
+
               {/* Progress Card */}
               <div className="p-4 rounded-2xl bg-white border border-[#E5DAC9] shadow-2xs">
                 <div className="flex items-center justify-between mb-2">
