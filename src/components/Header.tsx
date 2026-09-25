@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useNovena } from "@/context/NovenaContext";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
@@ -35,6 +35,23 @@ export function Header() {
   } = useNovena();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Prevent body scroll and handle ESC key when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setMobileMenuOpen(false);
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [mobileMenuOpen]);
 
   const completedCount = completedDays.length;
 
@@ -207,9 +224,10 @@ export function Header() {
             className="relative w-full max-w-sm bg-[#FAF7F2] h-full shadow-2xl flex flex-col justify-between overflow-y-auto border-l border-[#E5DAC9] animate-slideInRight text-left z-10"
             role="dialog"
             aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Drawer Top Bar */}
-            <div className="p-5 border-b border-[#E8DCD1] bg-gradient-to-r from-[#F4EFE6] to-[#FAF7F2] flex items-center justify-between">
+            <div className="p-4 sm:p-5 border-b border-[#E8DCD1] bg-gradient-to-r from-[#F4EFE6] to-[#FAF7F2] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#EED074] shadow-xs shrink-0">
                   <Image
@@ -231,11 +249,12 @@ export function Header() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-full hover:bg-[#E8DCD1] text-[#78716C] transition-colors cursor-pointer"
+                className="w-11 h-11 rounded-full hover:bg-[#E8DCD1] active:bg-[#DFCFBE] text-[#2A080E] transition-colors flex items-center justify-center cursor-pointer -mr-1"
                 aria-label="Fechar menu"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 

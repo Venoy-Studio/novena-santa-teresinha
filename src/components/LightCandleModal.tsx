@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useNovena } from "@/context/NovenaContext";
 import { SAINTS_CATALOG, CandleType, SaintOption } from "@/data/candleData";
@@ -14,6 +14,16 @@ export function LightCandleModal() {
     userIntention,
     devoteeProfile,
   } = useNovena();
+
+  // Close on ESC key
+  useEffect(() => {
+    if (!isLightCandleModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsLightCandleModalOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLightCandleModalOpen, setIsLightCandleModalOpen]);
 
   const [candleType, setCandleType] = useState<CandleType>("7_days");
   const [selectedSaintId, setSelectedSaintId] = useState<string>("santa-teresinha");
@@ -63,14 +73,20 @@ export function LightCandleModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setIsLightCandleModalOpen(false);
+      }}
+    >
       <div 
-        className="w-full max-w-2xl bg-[#FAF7F2] rounded-3xl border-2 border-[#EED074] shadow-2xl overflow-hidden text-left my-8"
+        className="w-full max-w-2xl bg-[#FAF7F2] rounded-3xl border-2 border-[#EED074] shadow-2xl overflow-hidden text-left my-auto max-h-[92vh] flex flex-col transform animate-scaleUp"
         role="dialog"
         aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#2A080E] to-[#420A12] text-white flex items-center justify-between border-b border-[#EED074]/40">
+        <div className="px-5 py-3.5 sm:px-6 sm:py-4 bg-gradient-to-r from-[#2A080E] to-[#420A12] text-white flex items-center justify-between border-b border-[#EED074]/40 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-full bg-[#FAF0D4] text-[#8E1C2E] flex items-center justify-center">
               <Flame className="w-5 h-5 text-[#C89B27] animate-pulse" />
@@ -79,22 +95,23 @@ export function LightCandleModal() {
               <span className="text-[10px] uppercase font-bold tracking-widest text-[#EED074] font-display block">
                 Capela Virtual de Devoção
               </span>
-              <h3 className="font-serif font-bold text-lg text-white">
+              <h3 className="font-serif font-bold text-base sm:text-lg text-white">
                 Acender uma Vela no Altar
               </h3>
             </div>
           </div>
           <button
+            type="button"
             onClick={() => setIsLightCandleModalOpen(false)}
-            className="p-1.5 rounded-full hover:bg-white/10 text-white/80 transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-full hover:bg-white/20 active:bg-white/30 text-white/90 transition-colors flex items-center justify-center cursor-pointer -mr-1"
             aria-label="Fechar"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Form Body */}
-        <form onSubmit={handleLight} className="p-6 space-y-6">
+        {/* Form Body (Scrollable) */}
+        <form onSubmit={handleLight} className="p-4 sm:p-6 space-y-5 overflow-y-auto flex-1">
           
           {/* Step 1: Candle Type Selection */}
           <div>

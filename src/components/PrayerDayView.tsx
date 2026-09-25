@@ -50,7 +50,8 @@ export function PrayerDayView() {
       `"${selectedDayData.quote}"\n\n` +
       `Oração a Santa Teresinha:\n${formattedInitialPrayer}\n\n` +
       `Rezam-se 24 Glórias ao Pai com a jaculatória: "Santa Teresinha do Menino Jesus, rogai por nós!"\n\n` +
-      `Pai Nosso e Ave Maria.`;
+      `Pai Nosso e Ave Maria.\n\n` +
+      `🌹 Reze a novena completa e acenda uma vela: https://novena-santa-teresinha.vercel.app`;
 
     navigator.clipboard.writeText(text);
     setCopiedPrayer(true);

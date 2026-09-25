@@ -24,6 +24,10 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://novena-santa-teresinha.vercel.app"),
+  alternates: {
+    canonical: "https://novena-santa-teresinha.vercel.app",
+  },
   title: "Novena das Rosas de Santa Teresinha do Menino Jesus",
   description: "Reze a tradicional Novena das Rosas a Santa Teresinha do Menino Jesus. Acompanhe os 9 dias, contador dos 24 Glórias, intenções pessoais e milagres documentados.",
   keywords: [
@@ -41,6 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Novena das Rosas: Reze a Santa Teresinha do Menino Jesus",
     description: "Reze os 9 dias da Novena das Rosas com meditações autênticas, contador interativo dos 24 Glórias, caderno de intenções e milagres.",
+    url: "https://novena-santa-teresinha.vercel.app",
     locale: "pt_BR",
     type: "website",
   },
