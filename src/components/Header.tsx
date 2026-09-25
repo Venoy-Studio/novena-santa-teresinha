@@ -10,7 +10,8 @@ import {
   Menu, 
   X, 
   Flame,
-  BookOpen
+  BookOpen,
+  Share2
 } from "lucide-react";
 
 export function Header() {
@@ -20,6 +21,8 @@ export function Header() {
     toggleSound,
     setIsContemplativeMode,
     setIsIntentionModalOpen,
+    setIsLightCandleModalOpen,
+    setIsSharePrayerModalOpen,
   } = useNovena();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,7 +62,7 @@ export function Header() {
         </a>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#44403C]">
+        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-[#44403C]">
           <a 
             href="#jornada" 
             className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
@@ -73,10 +76,17 @@ export function Header() {
             Rezar Agora
           </a>
           <a 
+            href="#capela-velas" 
+            className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E] flex items-center gap-1 text-[#8C6A17] font-semibold"
+          >
+            <Flame className="w-3.5 h-3.5 fill-current" />
+            <span>Capela das Velas</span>
+          </a>
+          <a 
             href="#milagres" 
             className="hover:text-[#8E1C2E] transition-colors py-1 hover:border-b-2 border-[#8E1C2E]"
           >
-            Milagres Reais
+            Milagres
           </a>
           <a 
             href="#historia" 
@@ -93,15 +103,35 @@ export function Header() {
         </nav>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           
+          {/* Light candle button */}
+          <button
+            onClick={() => setIsLightCandleModalOpen(true)}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#FAF0D4] text-[#8C6A17] border border-[#EED074] hover:bg-[#F9ECC4] transition-colors shadow-2xs cursor-pointer"
+            title="Acender uma Vela Virtual"
+          >
+            <Flame className="w-3.5 h-3.5 fill-current" />
+            <span>Acender Vela</span>
+          </button>
+
+          {/* Share prayer button */}
+          <button
+            onClick={() => setIsSharePrayerModalOpen(true)}
+            className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#FDE8EB] text-[#8E1C2E] border border-[#F8C7CE] hover:bg-[#FCE7E9] transition-colors shadow-2xs cursor-pointer"
+            title="Compartilhar Oração da Novena"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            <span>Compartilhar</span>
+          </button>
+
           {/* Intention button */}
           <button
             onClick={() => setIsIntentionModalOpen(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#FDE8EB] text-[#8E1C2E] border border-[#F8C7CE] hover:bg-[#FCE7E9] transition-colors shadow-2xs"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white text-[#570F1A] border border-[#DFCFBE] hover:bg-[#FAF7F2] transition-colors shadow-2xs cursor-pointer"
             title="Abrir Meu Caderno de Intenções"
           >
-            <HeartHandshake className="w-3.5 h-3.5" />
+            <HeartHandshake className="w-3.5 h-3.5 text-[#8E1C2E]" />
             <span>Meu Pedido</span>
           </button>
 
@@ -114,12 +144,12 @@ export function Header() {
           {/* Sound Toggle */}
           <button
             onClick={toggleSound}
-            className={`p-2 rounded-full border transition-colors ${
+            className={`p-2 rounded-full border transition-colors cursor-pointer ${
               soundEnabled 
                 ? "bg-white border-[#E8DCD1] text-[#8E1C2E] hover:bg-[#FDF2F3]" 
                 : "bg-[#EEE7DC] border-[#DFCFBE] text-[#78716C] hover:bg-[#E5DAC9]"
             }`}
-            title={soundEnabled ? "Sons de sino ativados (clique para silenciar)" : "Sons silenciados (clique para ativar)"}
+            title={soundEnabled ? "Sons de sino ativados" : "Sons silenciados"}
             aria-label={soundEnabled ? "Silenciar sinos" : "Ativar sinos"}
           >
             {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -128,7 +158,7 @@ export function Header() {
           {/* Contemplative Mode Button */}
           <button
             onClick={() => setIsContemplativeMode(true)}
-            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#8E1C2E] text-white hover:bg-[#731524] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8E1C2E]"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#8E1C2E] text-white hover:bg-[#731524] transition-all shadow-sm cursor-pointer"
             title="Abrir Modo Capela de Oração sem distrações"
           >
             <Flame className="w-3.5 h-3.5 text-[#EED074]" />
@@ -139,7 +169,7 @@ export function Header() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-md text-[#570F1A] hover:bg-[#EEE7DC] transition-colors"
+            className="lg:hidden p-2 rounded-md text-[#570F1A] hover:bg-[#EEE7DC] transition-colors cursor-pointer"
             aria-label="Abrir Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -149,27 +179,27 @@ export function Header() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#FAF7F2] border-b border-[#E8DCD1] px-4 pt-3 pb-5 space-y-3 animate-fadeIn">
+        <div className="lg:hidden bg-[#FAF7F2] border-b border-[#E8DCD1] px-4 pt-3 pb-5 space-y-3 animate-fadeIn">
           <div className="grid grid-cols-2 gap-2 pb-2">
             <button
               onClick={() => {
-                setIsIntentionModalOpen(true);
+                setIsLightCandleModalOpen(true);
                 setMobileMenuOpen(false);
               }}
-              className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#FDE8EB] text-[#8E1C2E] text-xs font-semibold border border-[#F8C7CE]"
+              className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#FAF0D4] text-[#8C6A17] text-xs font-bold border border-[#EED074] cursor-pointer"
             >
-              <HeartHandshake className="w-4 h-4" />
-              <span>Escrever Intenção</span>
+              <Flame className="w-4 h-4 fill-current" />
+              <span>Acender Vela</span>
             </button>
             <button
               onClick={() => {
-                setIsContemplativeMode(true);
+                setIsSharePrayerModalOpen(true);
                 setMobileMenuOpen(false);
               }}
-              className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#8E1C2E] text-white text-xs font-semibold"
+              className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#FDE8EB] text-[#8E1C2E] text-xs font-bold border border-[#F8C7CE] cursor-pointer"
             >
-              <Flame className="w-4 h-4 text-[#EED074]" />
-              <span>Modo Capela</span>
+              <Share2 className="w-4 h-4" />
+              <span>Compartilhar</span>
             </button>
           </div>
           <div className="flex flex-col space-y-2 text-sm font-medium text-[#44403C]">
@@ -188,6 +218,14 @@ export function Header() {
             >
               <span>Rezar a Novena de Hoje</span>
               <BookOpen className="w-4 h-4 text-[#8E1C2E]" />
+            </a>
+            <a 
+              href="#capela-velas" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-md hover:bg-[#FAF0D4] flex items-center justify-between text-[#8C6A17] font-bold"
+            >
+              <span>Capela das Velas Virtuais</span>
+              <Flame className="w-4 h-4 text-[#C89B27] fill-current" />
             </a>
             <a 
               href="#milagres" 

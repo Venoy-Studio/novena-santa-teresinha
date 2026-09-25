@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState } from "react";
 import { NOVENA_DAYS, DayNovena } from "@/data/novenaData";
+import { LitCandle, INITIAL_CANDLES, CandleType } from "@/data/candleData";
 import { triggerRosePetalsShower } from "@/utils/confettiRoses";
 import { prayerAudio } from "@/utils/audioChime";
 
@@ -24,6 +25,21 @@ interface NovenaContextType {
   setIsContemplativeMode: (open: boolean) => void;
   isIntentionModalOpen: boolean;
   setIsIntentionModalOpen: (open: boolean) => void;
+  isSharePrayerModalOpen: boolean;
+  setIsSharePrayerModalOpen: (open: boolean) => void;
+  isLightCandleModalOpen: boolean;
+  setIsLightCandleModalOpen: (open: boolean) => void;
+  candles: LitCandle[];
+  addCandle: (candleData: {
+    devoteeName: string;
+    location?: string;
+    intention: string;
+    type: CandleType;
+    saintId: string;
+    saintName: string;
+    saintImage: string;
+  }) => LitCandle;
+  prayForCandle: (id: string) => void;
 }
 
 const NovenaContext = createContext<NovenaContextType | undefined>(undefined);
@@ -73,9 +89,27 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
+  const [candles, setCandles] = useState<LitCandle[]>(() => {
+    if (typeof window === "undefined") return INITIAL_CANDLES;
+    try {
+      const saved = localStorage.getItem("novena_teresa_candles");
+      if (saved) {
+        const parsed: LitCandle[] = JSON.parse(saved);
+        // Merge with initial candles to keep community alive while retaining user ones
+        const userCandles = parsed.filter((c) => c.isUserOwned);
+        return [...userCandles, ...INITIAL_CANDLES];
+      }
+    } catch {
+      // ignore
+    }
+    return INITIAL_CANDLES;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isContemplativeMode, setIsContemplativeMode] = useState<boolean>(false);
   const [isIntentionModalOpen, setIsIntentionModalOpen] = useState<boolean>(false);
+  const [isSharePrayerModalOpen, setIsSharePrayerModalOpen] = useState<boolean>(false);
+  const [isLightCandleModalOpen, setIsLightCandleModalOpen] = useState<boolean>(false);
 
   const setCurrentDay = (day: number) => {
     if (day < 1 || day > 9) return;
@@ -109,6 +143,8 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     });
     triggerRosePetalsShower();
     prayerAudio.playRoseCelebration();
+    // Prompt to share that the devotee completed their prayer
+    setIsSharePrayerModalOpen(true);
   };
 
   const toggleDayCompleted = (day: number) => {
@@ -120,6 +156,7 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
         updated = [...prev, day].sort((a, b) => a - b);
         triggerRosePetalsShower();
         prayerAudio.playRoseCelebration();
+        setIsSharePrayerModalOpen(true);
       }
       try {
         localStorage.setItem("novena_teresa_completed", JSON.stringify(updated));
@@ -153,7 +190,8 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
       setTimeout(() => {
         triggerRosePetalsShower();
         prayerAudio.playRoseCelebration();
-      }, 300);
+        setIsSharePrayerModalOpen(true);
+      }, 400);
     }
   };
 
@@ -187,6 +225,54 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
     setSoundEnabled(state);
   };
 
+  const addCandle = (candleData: {
+    devoteeName: string;
+    location?: string;
+    intention: string;
+    type: CandleType;
+    saintId: string;
+    saintName: string;
+    saintImage: string;
+  }): LitCandle => {
+    const durationHours = candleData.type === "7_days" ? 168 : 24;
+    const newCandle: LitCandle = {
+      id: `candle-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      devoteeName: candleData.devoteeName.trim() || "Devoto de Santa Teresinha",
+      location: candleData.location?.trim() || undefined,
+      intention: candleData.intention.trim(),
+      type: candleData.type,
+      saintId: candleData.saintId,
+      saintName: candleData.saintName,
+      saintImage: candleData.saintImage,
+      litAt: new Date().toISOString(),
+      durationHours,
+      prayerCount: 1,
+      isUserOwned: true,
+    };
+
+    setCandles((prev) => {
+      const updated = [newCandle, ...prev];
+      try {
+        const userOnly = updated.filter((c) => c.isUserOwned);
+        localStorage.setItem("novena_teresa_candles", JSON.stringify(userOnly));
+      } catch {
+        // ignore
+      }
+      return updated;
+    });
+
+    triggerRosePetalsShower();
+    prayerAudio.playRoseCelebration();
+    return newCandle;
+  };
+
+  const prayForCandle = (id: string) => {
+    prayerAudio.playChime(659.25); // E5 soft blessing note
+    setCandles((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, prayerCount: c.prayerCount + 1 } : c))
+    );
+  };
+
   const selectedDayData = NOVENA_DAYS[currentDay - 1] || NOVENA_DAYS[0];
 
   return (
@@ -210,6 +296,13 @@ export function NovenaProvider({ children }: { children: React.ReactNode }) {
         setIsContemplativeMode,
         isIntentionModalOpen,
         setIsIntentionModalOpen,
+        isSharePrayerModalOpen,
+        setIsSharePrayerModalOpen,
+        isLightCandleModalOpen,
+        setIsLightCandleModalOpen,
+        candles,
+        addCandle,
+        prayForCandle,
       }}
     >
       {children}
