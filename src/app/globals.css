@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-cinzel), "Cinzel", "Times New Roman", serif;
+  --font-sans: var(--font-sans-main), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --color-carmine-950: #3b0810;
+  --color-carmine-900: #570f1a;
+  --color-carmine-800: #731524;
+  --color-carmine-700: #8e1c2e;
+  --color-carmine-600: #ab2539;
+  --color-carmine-500: #c53347;
+  --color-carmine-200: #f8c7ce;
+  --color-carmine-100: #fde8eb;
+  --color-carmine-50: #fff5f6;
+
+  --color-gold-700: #8c6a17;
+  --color-gold-600: #aa821f;
+  --color-gold-500: #c89b27;
+  --color-gold-400: #dfb23e;
+  --color-gold-300: #eed074;
+  --color-gold-100: #f9f0d3;
+  --color-gold-50: #fdf9ee;
+
+  --color-parchment-200: #e5dac9;
+  --color-parchment-100: #eee7dc;
+  --color-parchment-50: #f7f3ec;
+  --color-parchment-base: #faf7f2;
+}
+
+/* Custom Devotional Flourishes */
+.font-display {
+  font-family: var(--font-cinzel), serif;
+}
+
+.font-serif-sacred {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+/* Sacred Paper texture & borders */
+.sacred-card {
+  background: #ffffff;
+  border: 1px solid #ebd9cf;
+  box-shadow: 0 4px 20px -2px rgba(90, 18, 30, 0.04), 0 2px 6px -1px rgba(90, 18, 30, 0.02);
+}
+
+.sacred-border-gold {
+  border-color: #e5cb8e;
+}
+
+/* Soft gold glow for active prayer bead */
+.glow-gold {
+  box-shadow: 0 0 15px rgba(197, 155, 39, 0.45);
+}
+
+.glow-carmine {
+  box-shadow: 0 0 18px rgba(166, 36, 56, 0.35);
+}
+
+/* Custom warm scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #faf7f2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8c3b7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a62438;
+}
+
+/* Keyframes for soft pulse on prayer button */
+@keyframes softPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.95;
+  }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 3s ease-in-out infinite;
+}
+
+/* Subtle cross divider */
+.ornament-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.ornament-line::before,
+.ornament-line::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #dfcfc2;
+}
+
+.ornament-line:not(:empty)::before {
+  margin-right: 1rem;
+}
+
+.ornament-line:not(:empty)::after {
+  margin-left: 1rem;
+}
