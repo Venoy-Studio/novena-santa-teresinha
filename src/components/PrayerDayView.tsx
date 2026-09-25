@@ -266,12 +266,12 @@ export function PrayerDayView() {
         </div>
 
         {/* Action Bar (Share, Copy, Complete, Capela Mode, Light Candle) */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#F4EFE6] border border-[#E5DAC9]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-[#F4EFE6] border border-[#E5DAC9]">
           
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsSharePrayerModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8E1C2E] to-[#AB2539] hover:from-[#731524] hover:to-[#8E1C2E] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8E1C2E] to-[#AB2539] hover:from-[#731524] hover:to-[#8E1C2E] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
             >
               <Share2 className="w-4 h-4 text-[#EED074]" />
               <span>Compartilhar que Rezei</span>
@@ -279,7 +279,7 @@ export function PrayerDayView() {
 
             <button
               onClick={handleCopyPrayer}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white border border-[#DFCFBE] text-[#570F1A] text-xs font-semibold hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-white border border-[#DFCFBE] text-[#570F1A] text-xs font-semibold hover:bg-[#FAF7F2] transition-colors cursor-pointer"
             >
               {copiedPrayer ? (
                 <>
@@ -295,10 +295,10 @@ export function PrayerDayView() {
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsLightCandleModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FAF0D4] border border-[#C89B27] text-[#8C6A17] text-xs font-bold hover:bg-[#F9ECC4] transition-colors cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#FAF0D4] border border-[#C89B27] text-[#8C6A17] text-xs font-bold hover:bg-[#F9ECC4] transition-colors cursor-pointer"
               title="Acender Vela para este Dia"
             >
               <Flame className="w-4 h-4 text-[#C89B27]" />
@@ -307,7 +307,7 @@ export function PrayerDayView() {
 
             <button
               onClick={() => toggleDayCompleted(currentDay)}
-              className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
+              className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
                 isCompleted
                   ? "bg-[#FAF0D4] border border-[#C89B27] text-[#8C6A17]"
                   : "bg-[#8E1C2E] text-white hover:bg-[#731524]"
@@ -319,8 +319,9 @@ export function PrayerDayView() {
 
             <button
               onClick={() => setIsContemplativeMode(true)}
-              className="p-2.5 rounded-xl bg-white border border-[#DFCFBE] text-[#C89B27] hover:border-[#8E1C2E] transition-colors cursor-pointer"
+              className="p-2.5 rounded-xl bg-white border border-[#DFCFBE] text-[#C89B27] hover:border-[#8E1C2E] transition-colors cursor-pointer shrink-0"
               title="Abrir Modo Capela em Tela Cheia"
+              aria-label="Modo Capela"
             >
               <Flame className="w-4 h-4" />
             </button>

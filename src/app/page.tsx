@@ -15,7 +15,7 @@ import { LightCandleModal } from "@/components/LightCandleModal";
 export default function Home() {
   return (
     <NovenaProvider>
-      <main className="min-h-screen flex flex-col bg-[#FAF7F2]">
+      <main className="min-h-screen flex flex-col bg-[#FAF7F2] pb-20 lg:pb-0">
         <Header />
         <Hero />
         <DaySelector />
